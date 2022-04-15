@@ -25,6 +25,6 @@ export function saveCourse(req: Request, res: Response) {
     console.log('new course version', newCourse);
 
     setTimeout(() => {
-        res.status(200).json(COURSES[id]);
+        res.status(200).json({ payload: COURSES[id] });
     }, 2000);
 }

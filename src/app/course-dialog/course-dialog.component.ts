@@ -1,5 +1,5 @@
 import {
-    AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild, ViewEncapsulation,
+    AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, OnInit, ViewChild, ViewEncapsulation,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
@@ -7,11 +7,13 @@ import * as moment from 'moment';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { Course } from '../model/course';
+import { CoursesService } from '../services/courses/courses.service';
 
 @Component({
-    selector: 'course-dialog',
+    selector: 'app-course-dialog',
     templateUrl: './course-dialog.component.html',
     styleUrls: ['./course-dialog.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseDialogComponent implements AfterViewInit {
     form: FormGroup;
@@ -22,6 +24,7 @@ export class CourseDialogComponent implements AfterViewInit {
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<CourseDialogComponent>,
         @Inject(MAT_DIALOG_DATA) course:Course,
+        private readonly coursesService: CoursesService,
     ) {
         this.course = course;
 
@@ -39,6 +42,11 @@ export class CourseDialogComponent implements AfterViewInit {
 
     save() {
         const changes = this.form.value;
+
+        this.coursesService.updateCourse(this.course.id, changes)
+            .subscribe((value) => {
+                this.dialogRef.close(value);
+            });
     }
 
     close() {
