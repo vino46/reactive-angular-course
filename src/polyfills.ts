@@ -14,11 +14,11 @@
  * Learn more in https://angular.io/docs/ts/latest/guide/browser-support.html
  */
 
-/***************************************************************************************************
+/** *************************************************************************************************
  * BROWSER POLYFILLS
  */
 
-/** IE9, IE10 and IE11 requires all of the following polyfills. **/
+/** IE9, IE10 and IE11 requires all of the following polyfills. * */
 // import 'core-js/es6/symbol';
 // import 'core-js/es6/object';
 // import 'core-js/es6/function';
@@ -37,20 +37,15 @@
 /** IE10 and IE11 requires the following for the Reflect API. */
 // import 'core-js/es6/reflect';
 
-
-/** Evergreen browsers require these. **/
+/** Evergreen browsers require these. * */
 // Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
 
-
-
-/***************************************************************************************************
+/** *************************************************************************************************
  * Zone JS is required by Angular itself.
  */
-import 'zone.js';  // Included with Angular CLI.
+import 'zone.js'; // Included with Angular CLI.
 
-
-
-/***************************************************************************************************
+/** *************************************************************************************************
  * APPLICATION IMPORTS
  */
 
@@ -64,6 +59,4 @@ import 'zone.js';  // Included with Angular CLI.
  */
 // import 'intl/locale-data/jsonp/en';
 
-
 (window as any).global = window;
-

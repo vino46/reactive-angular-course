@@ -1,18 +1,19 @@
-import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import {Course} from "../model/course";
-import {FormBuilder, Validators, FormGroup} from "@angular/forms";
+import {
+    AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild, ViewEncapsulation,
+} from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
-import {catchError} from 'rxjs/operators';
-import {throwError} from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { Course } from '../model/course';
 
 @Component({
     selector: 'course-dialog',
     templateUrl: './course-dialog.component.html',
-    styleUrls: ['./course-dialog.component.css']
+    styleUrls: ['./course-dialog.component.css'],
 })
 export class CourseDialogComponent implements AfterViewInit {
-
     form: FormGroup;
 
     course:Course;
@@ -20,17 +21,16 @@ export class CourseDialogComponent implements AfterViewInit {
     constructor(
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<CourseDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) course:Course) {
-
+        @Inject(MAT_DIALOG_DATA) course:Course,
+    ) {
         this.course = course;
 
         this.form = fb.group({
             description: [course.description, Validators.required],
             category: [course.category, Validators.required],
             releasedAt: [moment(), Validators.required],
-            longDescription: [course.longDescription,Validators.required]
+            longDescription: [course.longDescription, Validators.required],
         });
-
     }
 
     ngAfterViewInit() {
@@ -38,13 +38,10 @@ export class CourseDialogComponent implements AfterViewInit {
     }
 
     save() {
-
-      const changes = this.form.value;
-
+        const changes = this.form.value;
     }
 
     close() {
         this.dialogRef.close();
     }
-
 }

@@ -1,0 +1,108 @@
+{
+    "root": true,
+    "ignorePatterns": [
+        "projects/**/*"
+    ],
+    "overrides": [
+        {
+            "files": [
+                "*.ts"
+            ],
+            "parserOptions": {
+                "project": [
+                    "tsconfig.json"
+                ],
+                "createDefaultProgram": true
+            },
+            "extends": [
+                "airbnb-base",
+                "plugin:@typescript-eslint/eslint-recommended",
+                "plugin:@typescript-eslint/recommended",
+                "plugin:@angular-eslint/all",
+                "plugin:@angular-eslint/template/process-inline-templates"
+            ],
+            "rules": {
+                "@angular-eslint/directive-selector": [
+                    "error",
+                    {
+                        "type": "attribute",
+                        "prefix": "app",
+                        "style": "camelCase"
+                    }
+                ],
+                "@angular-eslint/component-selector": [
+                    "error",
+                    {
+                        "type": "element",
+                        "prefix": "app",
+                        "style": "kebab-case"
+                    }
+                ],
+                "no-console": "off",
+                "max-len": [
+                    "warn",
+                    {
+                        "code": 140
+                    }
+                ],
+                "indent": [
+                    "warn",
+                    4,
+                    {
+                        "SwitchCase": 1
+                    }
+                ],
+                "lines-between-class-members": [
+                    "error",
+                    "always",
+                    {
+                        "exceptAfterSingleLine": true
+                    }
+                ],
+                "class-methods-use-this": "off",
+                "no-shadow": "off",
+                "@typescript-eslint/no-shadow": "error",
+                "no-useless-constructor": "off",
+                "@typescript-eslint/no-useless-constructor": "error",
+                "import/prefer-default-export": "off",
+                "import/extensions": [
+                    "error",
+                    "ignorePackages",
+                    {
+                        "js": "never",
+                        "ts": "never"
+                    }
+                ],
+                "max-classes-per-file": "off"
+            },
+            "settings": {
+                "import/extensions": [
+                    ".js",
+                    ".ts"
+                ],
+                "import/parsers": {
+                    "@typescript-eslint/parser": [
+                        ".ts"
+                    ]
+                },
+                "import/resolver": {
+                    "node": {
+                        "extensions": [
+                            ".js",
+                            ".ts"
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "files": [
+                "*.html"
+            ],
+            "extends": [
+                "plugin:@angular-eslint/template/recommended"
+            ],
+            "rules": {}
+        }
+    ]
+}
