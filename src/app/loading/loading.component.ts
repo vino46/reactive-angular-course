@@ -1,17 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { LoadingService } from '../services/loading/loading.service';
 
 @Component({
-    selector: 'loading',
+    selector: 'app-loading',
     templateUrl: './loading.component.html',
     styleUrls: ['./loading.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoadingComponent implements OnInit {
-    constructor() {
-
-    }
-
-    ngOnInit() {
-
-    }
+export class LoadingComponent {
+    constructor(
+        public readonly loadingService: LoadingService,
+    ) {}
 }

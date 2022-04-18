@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Course, sortCoursesBySeqNo } from '../model/course';
 import { CoursesService } from '../services/courses/courses.service';
+import { LoadingService } from '../services/loading/loading.service';
 
 @Component({
     selector: 'app-home',
@@ -16,6 +17,7 @@ export class HomeComponent implements OnInit {
 
     constructor(
         private readonly coursesService: CoursesService,
+        private readonly loadingService: LoadingService,
     ) {}
 
     ngOnInit() {
@@ -23,7 +25,9 @@ export class HomeComponent implements OnInit {
     }
 
     getCourses() {
-        const courses$ = this.coursesService.getCourses(sortCoursesBySeqNo);
+        const courses$ = this.loadingService.showLoaderUntilCompleted(
+            this.coursesService.getCourses(sortCoursesBySeqNo),
+        );
 
         this.beginnerCourses$ = courses$.pipe(
             map((courses) => courses.filter((course) => course.category === 'BEGINNER')),
