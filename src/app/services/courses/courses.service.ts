@@ -29,4 +29,11 @@ export class CoursesService {
             shareReplay(),
         );
     }
+
+    searchLessons(search: string) {
+        return this.apiService.searchLessons(search).pipe(
+            map(ApiService.getResponsePayload),
+            shareReplay(),
+        );
+    }
 }

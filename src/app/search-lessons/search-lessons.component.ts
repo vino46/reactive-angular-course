@@ -1,36 +1,40 @@
 import {
-    AfterViewInit, Component, ElementRef, OnInit, ViewChild,
+    ChangeDetectionStrategy, Component,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import {
-    debounceTime,
-    distinctUntilChanged,
-    startWith,
-    tap,
-    delay,
-    map,
-    concatMap,
-    switchMap,
-    withLatestFrom,
-    concatAll, shareReplay,
-} from 'rxjs/operators';
-import {
-    merge, fromEvent, Observable, concat,
+    BehaviorSubject,
 } from 'rxjs';
-import { Course } from '../model/course';
 import { Lesson } from '../model/lesson';
+import { CoursesService } from '../services/courses/courses.service';
 
 @Component({
-    selector: 'course',
+    selector: 'app-course',
     templateUrl: './search-lessons.component.html',
     styleUrls: ['./search-lessons.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchLessonsComponent implements OnInit {
-    constructor() {
+export class SearchLessonsComponent {
+    private readonly searchResultsSubject = new BehaviorSubject<Lesson[]>([]);
+    public readonly searchResults$ = this.searchResultsSubject.asObservable();
 
+    private readonly activeLessonSubject = new BehaviorSubject<Lesson | null>(null);
+    public readonly activeLesson$ = this.activeLessonSubject.asObservable();
+
+    constructor(
+        private readonly coursesService: CoursesService,
+    ) {}
+
+    handleSearch(search: string) {
+        this.coursesService.searchLessons(search).subscribe((lessons) => {
+            this.searchResultsSubject.next(lessons);
+        });
     }
 
-    ngOnInit() {
+    handleOpenLesson(lesson: Lesson) {
+        this.activeLessonSubject.next(lesson);
+    }
 
+    handleBackToSearch() {
+        this.activeLessonSubject.next(null);
     }
 }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '../../model/api';
 import { Course } from '../../model/course';
+import { Lesson } from '../../model/lesson';
 import { User } from '../../model/user';
 
 @Injectable({
@@ -26,5 +27,14 @@ export class ApiService {
 
     login(email: string, password: string) {
         return this.http.post<ApiResponse<User>>('/api/login', { email, password });
+    }
+
+    searchLessons(search: string) {
+        return this.http.get<ApiResponse<Lesson[]>>('/api/lessons', {
+            params: {
+                filter: search,
+                pageSize: '100',
+            },
+        });
     }
 }
