@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingService } from './services/loading/loading.service';
+import { MessagesService } from './services/messages/messages.service';
 
 @Component({
     selector: 'app-root',
@@ -7,6 +8,7 @@ import { LoadingService } from './services/loading/loading.service';
     styleUrls: ['./app.component.css'],
     providers: [
         LoadingService,
+        MessagesService,
     ],
 })
 export class AppComponent implements OnInit {

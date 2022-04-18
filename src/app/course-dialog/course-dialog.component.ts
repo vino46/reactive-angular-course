@@ -9,6 +9,7 @@ import { throwError } from 'rxjs';
 import { Course } from '../model/course';
 import { CoursesService } from '../services/courses/courses.service';
 import { LoadingService } from '../services/loading/loading.service';
+import { MessagesService } from '../services/messages/messages.service';
 
 @Component({
     selector: 'app-course-dialog',
@@ -17,6 +18,7 @@ import { LoadingService } from '../services/loading/loading.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         LoadingService,
+        MessagesService,
     ],
 })
 export class CourseDialogComponent implements AfterViewInit {
@@ -30,6 +32,7 @@ export class CourseDialogComponent implements AfterViewInit {
         @Inject(MAT_DIALOG_DATA) course:Course,
         private readonly coursesService: CoursesService,
         private readonly loadingService: LoadingService,
+        private readonly messagesService: MessagesService,
     ) {
         this.course = course;
 
@@ -45,9 +48,17 @@ export class CourseDialogComponent implements AfterViewInit {
 
     save() {
         const changes = this.form.value;
-        const updateCourse$ = this.loadingService.showLoaderUntilCompleted(
-            this.coursesService.updateCourse(this.course.id, changes),
-        );
+        const updateCourse$ = this.loadingService
+            .showLoaderUntilCompleted(this.coursesService.updateCourse(this.course.id, changes))
+            .pipe(
+                catchError((error) => {
+                    const message = 'Unable to update course';
+                    console.log(message, error);
+                    this.messagesService.showMessages(message);
+
+                    return throwError(error);
+                }),
+            );
 
         updateCourse$.subscribe((value) => {
             this.close(value);

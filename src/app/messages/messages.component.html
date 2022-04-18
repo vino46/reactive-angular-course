@@ -1,0 +1,9 @@
+<ng-container *ngIf="messagesService.messages$ | async as messages">
+    <div class="messages-container" *ngIf="showMessages$ | async">
+        <div class="message" *ngFor="let message of messages">
+            {{ message }}
+        </div>
+
+        <mat-icon class="close" (click)="handleClose()">close</mat-icon>
+    </div>
+</ng-container>
