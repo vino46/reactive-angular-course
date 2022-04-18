@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, shareReplay } from 'rxjs/operators';
-import { ApiResponse } from '../../model/api';
 import { Course, sortCoursesBySeqNo } from '../../model/course';
 import { ApiService } from '../api/api.service';
 import { LoadingService } from '../loading/loading.service';
@@ -22,10 +21,6 @@ export class CoursesStore {
         this.getCourses();
     }
 
-    private getResponsePayload<T>(response: ApiResponse<T>): T {
-        return response.payload;
-    }
-
     private processError(error: unknown, message: string) {
         this.messagesService.showMessages(message);
         console.log(message, error);
@@ -41,7 +36,7 @@ export class CoursesStore {
         this.withLoadingIndicator(
             this.apiService.getCourses()
                 .pipe(
-                    map(this.getResponsePayload),
+                    map(ApiService.getResponsePayload),
                     catchError((error) => this.processError(error, 'Could not load courses!')),
                     shareReplay(),
                 ),
@@ -66,7 +61,7 @@ export class CoursesStore {
         this.coursesSubject.next(newCourses);
 
         return this.apiService.updateCourse(courseId, changes).pipe(
-            map(this.getResponsePayload),
+            map(ApiService.getResponsePayload),
             catchError((error) => this.processError(error, 'Could not update course!')),
             shareReplay(),
         );
