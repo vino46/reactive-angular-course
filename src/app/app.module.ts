@@ -19,7 +19,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { CourseDialogComponent } from './course-dialog/course-dialog.component';
 import { CourseComponent } from './course/course.component';
@@ -34,6 +34,8 @@ import { MessagesComponent } from './messages/messages.component';
 import { SearchLessonsComponent } from './search-lessons/search-lessons.component';
 import { LoadingComponent } from './loading/loading.component';
 import { CoursesCardListComponent } from './courses-card-list/courses-card-list.component';
+import { LoadingService } from './services/loading/loading.service';
+import { MessagesService } from './services/messages/messages.service';
 
 @NgModule({
     declarations: [
@@ -41,41 +43,43 @@ import { CoursesCardListComponent } from './courses-card-list/courses-card-list.
         AppComponent,
         CourseComponent,
         CourseDialogComponent,
+        CoursesCardListComponent,
         HomeComponent,
         LessonComponent,
-        LoginComponent,
         LoadingComponent,
+        LoginComponent,
         MessagesComponent,
         SafeUrlPipe,
         SearchLessonsComponent,
-        CoursesCardListComponent,
 
     ],
     imports: [
+        AppRoutingModule,
         BrowserAnimationsModule,
         BrowserModule,
         HttpClientModule,
         MatButtonModule,
         MatCardModule,
+        MatDatepickerModule,
+        MatDialogModule,
         MatIconModule,
+        MatInputModule,
         MatListModule,
         MatMenuModule,
+        MatMomentDateModule,
+        MatPaginatorModule,
+        MatProgressSpinnerModule,
+        MatSelectModule,
         MatSidenavModule,
+        MatSortModule,
+        MatTableModule,
         MatTabsModule,
         MatToolbarModule,
-        MatInputModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatProgressSpinnerModule,
-        MatDialogModule,
-        AppRoutingModule,
-        MatSelectModule,
-        MatDatepickerModule,
-        MatMomentDateModule,
         ReactiveFormsModule,
     ],
     providers: [
+        LoadingService,
+        MessagesService,
     ],
     bootstrap: [AppComponent],
     entryComponents: [CourseDialogComponent],

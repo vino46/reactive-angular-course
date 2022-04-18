@@ -16,9 +16,6 @@ export class CoursesCardListComponent {
     @Input()
         courses: Course[] = [];
 
-    @Output()
-    private readonly coursesChanged = new EventEmitter();
-
     constructor(
         private readonly dialog: MatDialog,
     ) {}
@@ -32,14 +29,6 @@ export class CoursesCardListComponent {
 
         dialogConfig.data = course;
 
-        const dialogRef = this.dialog.open(CourseDialogComponent, dialogConfig);
-
-        dialogRef.afterClosed()
-            .pipe(
-                filter(((value) => !!value)),
-                tap((value) => {
-                    this.coursesChanged.emit(value);
-                }),
-            ).subscribe();
+        this.dialog.open(CourseDialogComponent, dialogConfig);
     }
 }

@@ -1,10 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { Course, sortCoursesBySeqNo } from '../model/course';
-import { CoursesService } from '../services/courses/courses.service';
-import { LoadingService } from '../services/loading/loading.service';
-import { MessagesService } from '../services/messages/messages.service';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CoursesStore } from '../services/courses/courses.store.service';
 
 @Component({
     selector: 'app-home',
@@ -12,38 +7,11 @@ import { MessagesService } from '../services/messages/messages.service';
     styleUrls: ['./home.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit {
-    beginnerCourses$: Observable<Course[]>;
-    advancedCourses$: Observable<Course[]>;
+export class HomeComponent {
+    public readonly beginnerCourses$ = this.coursesStore.filterByCategory('BEGINNER');
+    public readonly advancedCourses$ = this.coursesStore.filterByCategory('ADVANCED');
 
     constructor(
-        private readonly coursesService: CoursesService,
-        private readonly loadingService: LoadingService,
-        private readonly messagesService: MessagesService,
+        private readonly coursesStore: CoursesStore,
     ) {}
-
-    ngOnInit() {
-        this.getCourses();
-    }
-
-    getCourses() {
-        const courses$ = this.loadingService
-            .showLoaderUntilCompleted(this.coursesService.getCourses(sortCoursesBySeqNo))
-            .pipe(
-                catchError((error) => {
-                    const message = 'Could not load courses';
-                    this.messagesService.showMessages(message);
-                    console.log(message, error);
-
-                    return throwError(error);
-                }),
-            );
-
-        this.beginnerCourses$ = courses$.pipe(
-            map((courses) => courses.filter((course) => course.category === 'BEGINNER')),
-        );
-        this.advancedCourses$ = courses$.pipe(
-            map((courses) => courses.filter((course) => course.category === 'ADVANCED')),
-        );
-    }
 }

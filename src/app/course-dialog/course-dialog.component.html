@@ -2,8 +2,6 @@
 
 
 <mat-dialog-content [formGroup]="form">
-    <app-messages></app-messages>
-
     <mat-form-field>
 
         <input matInput placeholder="Course Description" formControlName="description">
@@ -60,7 +58,5 @@
     <button class="mat-raised-button mat-primary" #saveButton (click)="save()">
         Save
     </button>
-
-    <app-loading></app-loading>
 
 </mat-dialog-actions>

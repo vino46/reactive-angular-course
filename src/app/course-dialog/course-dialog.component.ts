@@ -1,27 +1,19 @@
 import {
-    AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, OnInit, ViewChild, ViewEncapsulation,
+    ChangeDetectionStrategy, Component, Inject,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 import { Course } from '../model/course';
-import { CoursesService } from '../services/courses/courses.service';
-import { LoadingService } from '../services/loading/loading.service';
-import { MessagesService } from '../services/messages/messages.service';
+import { CoursesStore } from '../services/courses/courses.store.service';
 
 @Component({
     selector: 'app-course-dialog',
     templateUrl: './course-dialog.component.html',
     styleUrls: ['./course-dialog.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        LoadingService,
-        MessagesService,
-    ],
 })
-export class CourseDialogComponent implements AfterViewInit {
+export class CourseDialogComponent {
     form: FormGroup;
 
     course:Course;
@@ -30,9 +22,7 @@ export class CourseDialogComponent implements AfterViewInit {
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<CourseDialogComponent>,
         @Inject(MAT_DIALOG_DATA) course:Course,
-        private readonly coursesService: CoursesService,
-        private readonly loadingService: LoadingService,
-        private readonly messagesService: MessagesService,
+        private readonly coursesStore: CoursesStore,
     ) {
         this.course = course;
 
@@ -44,25 +34,11 @@ export class CourseDialogComponent implements AfterViewInit {
         });
     }
 
-    ngAfterViewInit() {}
-
     save() {
         const changes = this.form.value;
-        const updateCourse$ = this.loadingService
-            .showLoaderUntilCompleted(this.coursesService.updateCourse(this.course.id, changes))
-            .pipe(
-                catchError((error) => {
-                    const message = 'Unable to update course';
-                    console.log(message, error);
-                    this.messagesService.showMessages(message);
 
-                    return throwError(error);
-                }),
-            );
-
-        updateCourse$.subscribe((value) => {
-            this.close(value);
-        });
+        this.coursesStore.updateCourse(this.course.id, changes).subscribe();
+        this.close();
     }
 
     close(value?: Course) {
