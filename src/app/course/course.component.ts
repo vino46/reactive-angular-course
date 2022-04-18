@@ -1,40 +1,64 @@
-import {
-    AfterViewInit, Component, ElementRef, OnInit, ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {
-    debounceTime,
-    distinctUntilChanged,
-    startWith,
-    tap,
-    delay,
-    map,
-    concatMap,
-    switchMap,
-    withLatestFrom,
-    concatAll, shareReplay, catchError,
-} from 'rxjs/operators';
-import {
-    merge, fromEvent, Observable, concat, throwError,
-} from 'rxjs';
+import { concatMap, map, startWith } from 'rxjs/operators';
+import { combineLatest, Observable, throwError } from 'rxjs';
+import { CoursesService } from '../services/courses/courses.service';
 import { Course } from '../model/course';
 import { Lesson } from '../model/lesson';
 
+interface CourseData {
+    course: Course;
+    lessons: Lesson[];
+}
+
+const defaultData: CourseData = {
+    course: {
+        description: 'Default Course Title',
+    } as Course,
+    lessons: [],
+};
+
 @Component({
-    selector: 'course',
+    selector: 'app-course',
     templateUrl: './course.component.html',
     styleUrls: ['./course.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CourseComponent implements OnInit {
-    course: Course;
+export class CourseComponent {
+    private readonly course$ = this.route.paramMap.pipe(
+        map((paramMap) => parseInt(paramMap.get('courseId'), 10)),
+        concatMap((id) => {
+            if (id) {
+                return this.coursesService.getCourse(id);
+            }
 
-    lessons: Lesson[];
+            return throwError('getCourse: Invalid ID received');
+        }),
+    );
 
-    constructor(private route: ActivatedRoute) {
+    private readonly lessons$ = this.route.paramMap.pipe(
+        map((paramMap) => parseInt(paramMap.get('courseId'), 10)),
+        concatMap((id) => {
+            if (id) {
+                return this.coursesService.getCourseLessons(id);
+            }
 
-    }
+            return throwError('getCourseLessons: Invalid ID received');
+        }),
+    );
 
-    ngOnInit() {
+    public readonly courseData$: Observable<CourseData> = combineLatest([this.course$, this.lessons$])
+        .pipe(
+            // Using startWith to show default values implementation
+            startWith([defaultData.course, defaultData.lessons] as const),
+            map(([course, lessons]) => ({
+                course,
+                lessons,
+            })),
+        );
 
-    }
+    constructor(
+        private readonly route: ActivatedRoute,
+        private readonly coursesService: CoursesService,
+    ) {}
 }

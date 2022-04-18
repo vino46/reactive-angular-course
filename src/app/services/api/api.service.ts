@@ -21,6 +21,19 @@ export class ApiService {
         return this.http.get<ApiResponse<Course[]>>('/api/courses');
     }
 
+    getCourse(id: number) {
+        return this.http.get<ApiResponse<Course>>(`/api/courses/${id}`);
+    }
+
+    getCourseLessons(courseId: number) {
+        return this.http.get<ApiResponse<Lesson[]>>('/api/lessons', {
+            params: {
+                pageSize: '10000',
+                courseId: `${courseId}`,
+            },
+        });
+    }
+
     updateCourse(courseId: string, changes: Partial<Course>) {
         return this.http.put<ApiResponse<Course>>(`/api/courses/${courseId}`, changes);
     }

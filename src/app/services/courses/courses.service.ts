@@ -23,6 +23,20 @@ export class CoursesService {
         );
     }
 
+    getCourse(id: number) {
+        return this.apiService.getCourse(id).pipe(
+            map(ApiService.getResponsePayload),
+            shareReplay(),
+        );
+    }
+
+    getCourseLessons(courseId: number) {
+        return this.apiService.getCourseLessons(courseId).pipe(
+            map(ApiService.getResponsePayload),
+            shareReplay(),
+        );
+    }
+
     updateCourse(courseId: string, changes: Partial<Course>) {
         return this.apiService.updateCourse(courseId, changes).pipe(
             map(ApiService.getResponsePayload),
